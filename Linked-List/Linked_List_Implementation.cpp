@@ -1,38 +1,65 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
 
-class Node{
+class Node
+{
 public:
-	int data;
-	Node* ptr;
+    int val;
+    Node *next;
 };
-Node *first=NULL,*last=NULL;
 
-void create(int n){
-	Node *tmp;
-	tmp=new Node;
-	tmp->data=n;
-	tmp->ptr=NULL;
-	if(first){
-		last->ptr=tmp;
-		last=tmp;
-	}
-	else{
-		first=last=tmp;
-		// cout<<first->data<<endl;
-	}
+void createNode(int val, Node **head, Node **next)
+{
+    Node *tmp=new Node;
+    tmp->val=val;
+    tmp->next=NULL;
+    if(*head)
+    {
+        (*next)->next=tmp;
+        (*next)=tmp;
+    }
+    else
+        (*head)=(*next)=tmp;
+}
+
+void removeNode(Node **node, Node **prev, Node **head)
+{
+    if((*prev))
+    {
+        (*prev)->next=(*node)->next;
+        delete (*node);
+        (*node)=(*prev)->next;
+    }
+    else
+    {
+        (*prev)=(*node)->next;
+        delete (*node);
+        (*node)=(*prev);
+        (*head)=(*prev);
+        (*prev)=NULL;
+    }
 }
 
 int main()
 {
-	create(10);
-	create(20);
-	// cout<<first->data;
-	Node *i=first;
-	while(i)
-	{
-		cout<<i->data<<endl;
-		i=i->ptr;
-	}
-	return 0;
+    Node *head=NULL, *next=NULL;
+    createNode(10, &head, &next);
+    createNode(12,&head,&next);
+    createNode(14, &head, &next);
+    Node *node=head, *prev=NULL;
+    while(node)
+    {
+        if((node->val)==10)
+        {
+            removeNode(&node,&prev,&head);
+        }
+        prev=node;
+        node=node->next;
+    }
+    while(head)
+    {
+        cout<<head->val<<endl;
+        head=(head->next);
+    }
+    return 0;
 }
